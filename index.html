@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <!-- pseudokod:
+    välkommen till mars
+    titta på rovern curiositys bilder
+    välj vilken dag du vill titta på
+        mars soldag? välj mellan 1-1000
+        earth day? skriv in datum i format 2015-04-29
+    välj vilken kameravinkel du vill se mars ur
+        fhaz
+        rhaz
+        pancam
+        navcam
+        mast
+    visa bilden
+    -->
+    <h1>Welcome to Mars</h1>
+    <h3>Look at the rover Curiosity's daily pictures</h3>
+    <p>First, choose which day to look at. Do you want to choose the Marsian sol day? Or a specific date on earth? </p>
+    
+    <form action="#">
+        <select name="" id="date-choice">
+            <option value="" disabled selected>Select a date type</option>
+            <option value="sol">Marsian sol day</option>
+            <option value="earth">Earth date</option>
+        </select>
+        <input type="text" id="day-input" placeholder="Enter Marsian sol day" style="display: none;">
+        <input type="date" id="earth-input" style="display: none;">
+    </form>
+    
+
+    <form action="#">
+        <select name="" id="camera-angle">
+            <option value="fhaz">Front Hazard Avoidance Camera</option>
+            <option value="rhaz">Rear Hazard Avoidance Camera</option>
+            <option value="mast">Mast Camera</option>
+            <option value="navcam">Navigation Camera</option>
+        </select>
+    </form>
+    
+    <div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+        <div>
+            <p>Psst... All dates may not have photos available. Curiosity might have been asleep that day. Try out these days to make sure you get some nice photos!</p>
+        </div>
+        <div>
+            <p>Sol dates:
+                1000
+            </p>
+        </div>
+        <div>
+            <p>Earth dates:
+                2012-08-21
+            </p>
+        </div>
+    </div>
+
+    <button id="fetch-btn">Show me a picture</button>
+    <div id="content"></div>
+    <script src="test-spotify.js"></script>
+</body>
+</html>
