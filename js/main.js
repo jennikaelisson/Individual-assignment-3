@@ -30,13 +30,10 @@ fetchBtn.addEventListener('click', async function() {
         let response = await fetch(url);
 
         console.log(url)
+
         if (!response.ok) {
             throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
         }
-        // let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${dateChoice.value}${dayInput.value}&${cameraAngle.value}&api_key=DEMO_KEY`)
-        // if (!response.ok) {
-        //     throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
-        // }
 
         let photosData = await response.json();
         console.log(photosData);
@@ -48,15 +45,9 @@ fetchBtn.addEventListener('click', async function() {
             const photoImgSrc = photo.img_src;
             const cameraFullName = photo.camera.full_name;
             const earthDate = photo.earth_date;
-          
-            // console.log(`Photo ID: ${photoId}`);
-            // console.log(`Sol: ${photoSol}`);
-            // console.log(`Image Source: ${photoImgSrc}`);
-            // console.log(`Camera Full Name: ${cameraFullName}`);
-            // console.log(`Earth Date: ${earthDate}`);
 
             content.innerHTML = `<img src=${photoImgSrc} height=400px>
-            <ul><li>${cameraFullName}</li><li>Sol date: ${photoSol}</li><li>Earth date: ${earthDate}</li><li>Photo ID: ${photoId}</li>`
+            <ul><li>${cameraFullName}</li><li>Sol date: ${photoSol}</li><li>Earth date: ${earthDate}</li><li>Photo ID: ${photoId}</li></ul>`
         }
           
     } catch (error) {
