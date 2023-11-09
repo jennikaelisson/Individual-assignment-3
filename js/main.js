@@ -136,7 +136,7 @@ function onLoadPlay() {
 } 
 
 function onClickPlay() {
-    let audioTwo = new Audio("../audio/blaster-2-81267.mp3");
+    let audioTwo = new Audio("https://github.com/jennikaelisson/Individual-assignment-3/raw/main/audio/blaster-2-81267.mp3");
     audioTwo.play();
 }
 
@@ -166,3 +166,4 @@ function handleErrorMessage(error) {
         content.innerHTML = "Oops, there was an internal problem. We have just dispatched a group of monkeys to fix the problem for you :)";
     }
 }
+

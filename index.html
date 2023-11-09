@@ -22,14 +22,16 @@
     <main class="container row mx-auto">
         <div class="col-12 p-3">
             <img src="img/soundwave.gif" id="wave" alt="Animated soundwave">
-            <h2>Look at the rover Curiosity's daily pictures</h2> 
+        </div>
+        <div class="col-12 p-3">
+            <h3>Look at the rover Curiosity's daily pictures</h3> 
         </div>
         <div class="col-12 col-lg-6 p-3">
             <div class="col-12 input-group-prepend p-3">
                 <h3>Start here</h3>
                 <p>First, choose which day to look at. Do you want to choose a Marsian sol day? Or a specific date on earth? </p>
-                <form action="#">
-                    <select name="" id="date-choice" class="custom-select">
+                <form action="#" class="mx-auto">
+                    <select name="" id="date-choice" class="custom-select"  style="width: 300px;">
                         <option value="" disabled selected>Select a date type</option>
                         <option value="sol">Marsian sol day</option>
                         <option value="earth">Earth date</option>
@@ -39,8 +41,9 @@
                 </form>
             </div>
             <div class="col-12 p-3">
-                <form action="#">
-                    <select name="" id="camera-angle">
+                <form action="#" class="mx-auto">
+                    <select name="" id="camera-angle" style="width: 300px;">
+                        <option value="" disabled selected>Choose camera</option>
                         <option value="navcam">Navigation Camera</option>
                         <option value="fhaz">Front Hazard Avoidance Camera</option>
                         <option value="rhaz">Rear Hazard Avoidance Camera</option>
@@ -49,7 +52,7 @@
                 </form>
             </div>
             <div class="col-12 p-3">        
-                <button id="fetch-btn" class="btn">Show me a picture</button>
+                <button id="fetch-btn" class="btn"><h3>Show me a picture</h3></button>
             </div>
         </div>
         <div class="col-12 col-lg-6 p-3">
@@ -57,13 +60,13 @@
                 <h3>Psst...</h3>
                 <p>All dates may not have photos available. Curiosity might have been asleep that day. Try out these days to make sure you get some nice photos!</p>
             </div>
-            <div class="col-12">
+            <div class="remove-margin col-12">
                 <p>Sol dates:</p>
                 <button class="sol-dates btn">1000</button>
                 <button class="sol-dates btn">15</button>
                 <button class="sol-dates btn">3980</button>        
             </div>
-            <div class="col-12">
+            <div class="remove-margin col-12">
                 <p>Earth dates:</p>
                 <button class="earth-dates btn">2012-08-21</button>
                 <button class="earth-dates btn">2023-04-08</button>
