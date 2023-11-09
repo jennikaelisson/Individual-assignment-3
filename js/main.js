@@ -7,7 +7,7 @@ let content = document.getElementById('content');
 let earthButtons = document.getElementsByClassName('earth-dates');
 let solButtons = document.getElementsByClassName('sol-dates');
 let loadingIndicator = document.getElementById('loading-indicator'); 
-
+let soundWaveGif = document.getElementById('wave');
 
 dateChoice.addEventListener('change', function() {
     const selectedOption = dateChoice.value;
@@ -127,6 +127,8 @@ for (const earthButton of earthButtons) {
         }
     });
 }
+
+soundWaveGif.addEventListener('click', onLoadPlay)
 
 function onLoadPlay() {
     let audioOne = new Audio("../audio/brain-damage-148577.mp3");
