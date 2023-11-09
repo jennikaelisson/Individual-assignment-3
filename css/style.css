@@ -6,6 +6,7 @@ body {
     font-family: 'Zen Dots', serif;
     font-size: 1rem;
     color: white;
+    text-shadow: 2px 2px 4px #000000;
 }
 
 main {
@@ -17,12 +18,39 @@ main {
     font-family: 'Major Mono Display', serif;
 }
 
-form {
-    width: 300px;
+.btn {
+    color: #ffffff;
+    text-shadow: 5px 5px 10px #707186, 1px 1px 2px black, 0 0 5px darkblue;
 }
 
+.btn:hover {
+    color: rgb(171, 184, 231);
+}
+
+#earth-input,
 #day-input {
     width: 200px;
+    margin-top: 10px;
+}
+
+.remove-margin p {
+    margin: 0;
+}
+
+#content img {
+    max-width: 100%;
+}
+
+.hide {
+    display: none;
+}
+
+.no-bullets ul {
+    list-style: none;
+}
+
+#wave {
+    width: 100px;
 }
 
 h1 {
@@ -46,33 +74,33 @@ M E D I A  Q U E R I E S
 @media (min-width: 544px) {  
   select {width: auto;}
   h1 {font-size:3rem;} /*1rem = 16px*/
-  h2 {font-size: rem;}
-  h3 {font-size: rem;}
+  h2 {font-size: 1.5rem;}
+  h3 {font-size: 1.2rem;}
   p {font-size: 1rem;}
 }
  
 /* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
 @media (min-width: 768px) {  
   h1 {font-size:3rem;} /*1rem = 16px*/
-  h2 {font-size: rem;}
-  h3 {font-size: rem;}
+  h2 {font-size: 2rem;}
+  h3 {font-size: 1.4rem;}
   p {font-size: 1.2rem;}
 }
  
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) { 
   h1 {font-size:4rem;} /*1rem = 16px*/
-  h2 {font-size: rem;}
-  h3 {font-size: rem;}
-  p {font-size: 1.4rem;}
+  h2 {font-size: 3rem;}
+  h3 {font-size: 1.6rem;}
+  p {font-size: 1.2rem;}
 }
  
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {  
   h1 {font-size:5rem;} /*1rem = 16px*/    
-  h2 {font-size: rem;}
-  h3 {font-size: rem;}
-  p {font-size: 1.5rem;}
+  h2 {font-size: 4rem;}
+  h3 {font-size: 1.8rem;}
+  p {font-size: 1.2rem;}
 }
  
 /*
