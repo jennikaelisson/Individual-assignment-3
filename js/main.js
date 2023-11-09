@@ -6,6 +6,7 @@ let cameraAngle = document.getElementById('camera-angle');
 let content = document.getElementById('content');
 let earthButtons = document.getElementsByClassName('earth-dates');
 let solButtons = document.getElementsByClassName('sol-dates');
+let loadingIndicator = document.getElementById('loading-indicator'); 
 
 
 dateChoice.addEventListener('change', function() {
@@ -24,6 +25,18 @@ dateChoice.addEventListener('change', function() {
 
 fetchBtn.addEventListener('click', async function() {
     onClickPlay()
+
+    // Check that user has entered a valid date before fetching API
+    if (!dayInput.value && !earthInput.value) {
+        content.innerHTML = "<h2>Please enter a date before fetching photos!</h2>";
+        return;
+    }
+
+    content.innerHTML = '';
+
+     // Show the loading indicator before making the fetch request
+     loadingIndicator.classList.toggle('hide');
+
     try {
         let solValue = dayInput.value;
         let earthDateValue = earthInput.value;
@@ -41,25 +54,13 @@ fetchBtn.addEventListener('click', async function() {
         let photosData = await response.json();
         console.log(photosData);
 
-        let photoListHTML = "";
+        // Hide the loading indicator after data is fetched
+        loadingIndicator.classList.toggle('hide');
 
-        // photoListHTML.innerHTML = "";
-        for (const photo of photosData.photos) {
-            const photoId = photo.id;
-            const photoSol = photo.sol;
-            const photoImgSrc = photo.img_src;
-            const cameraFullName = photo.camera.full_name;
-            const earthDate = photo.earth_date;
-
-            photoListHTML = `<img src=${photoImgSrc} height=400px>
-            <ul><li>${cameraFullName}</li><li>Sol date: ${photoSol}</li><li>Earth date: ${earthDate}</li><li>Photo ID: ${photoId}</li></ul>`
-
-            content.innerHTML = photoListHTML;
-        }
-          
+        showPhotos(photosData)          
     } catch (error) {
-        console.log(error);
-        content.innerHTML = "Oops, there was an internal problem. We have just dispatched a group of monkeys to fix the problem for you :)";
+        loadingIndicator.classList.toggle('hide');
+        handleErrorMessage(error);
     } 
 })
 
@@ -67,6 +68,12 @@ fetchBtn.addEventListener('click', async function() {
 for (const solButton of solButtons) {
     solButton.addEventListener('click', async function() {
         onClickPlay()
+
+        content.innerHTML = '';
+
+        // Show the loading indicator before making the fetch request
+        loadingIndicator.classList.toggle('hide');
+
         try {
             let solValue = solButton.textContent; // Get the sol date from the clicked button
             let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=${solValue}&api_key=DEMO_KEY`);
@@ -79,31 +86,28 @@ for (const solButton of solButtons) {
             let photosData = await response.json();
             console.log(photosData);
 
-            content.innerHTML = "";
-            for (const photo of photosData.photos) {
-                const photoId = photo.id;
-                const photoSol = photo.sol;
-                const photoImgSrc = photo.img_src;
-                const cameraFullName = photo.camera.full_name;
-                const earthDate = photo.earth_date;
+            loadingIndicator.classList.toggle('hide');
 
-                content.innerHTML = `<img src=${photoImgSrc} height=400px>
-                <ul><li>${cameraFullName}</li><li>Sol date: ${photoSol}</li><li>Earth date: ${earthDate}</li><li>Photo ID: ${photoId}</li></ul>`
-            }
+            showPhotos(photosData)
         } catch (error) {
-            console.log(error);
-            content.innerHTML = "Oops, there was an internal problem. We have just dispatched a group of monkeys to fix the problem for you :)";
+            loadingIndicator.classList.toggle('hide');
+            handleErrorMessage(error);
         } 
     });
 }
 
 
-// Loop through the collection of solButtons and add an event listener to each one
+// Loop through the collection of earthButtons and add an event listener to each one
 for (const earthButton of earthButtons) {
     earthButton.addEventListener('click', async function() {
         onClickPlay()
+
+        content.innerHTML = '';
+
+        // Show the loading indicator before making the fetch request
+        loadingIndicator.classList.toggle('hide');
         try {
-            let earthValue = earthButton.textContent; // Get the sol date from the clicked button
+            let earthValue = earthButton.textContent; // Get the earth date from the clicked button
             let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthValue}&api_key=DEMO_KEY`);
             console.log(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthValue}&api_key=DEMO_KEY`);
 
@@ -114,21 +118,13 @@ for (const earthButton of earthButtons) {
             let photosData = await response.json();
             console.log(photosData);
 
-            content.innerHTML = "";
-            for (const photo of photosData.photos) {
-                const photoId = photo.id;
-                const photoSol = photo.sol;
-                const photoImgSrc = photo.img_src;
-                const cameraFullName = photo.camera.full_name;
-                const earthDate = photo.earth_date;
+            loadingIndicator.classList.toggle('hide');
 
-                content.innerHTML = `<img src=${photoImgSrc} height=400px>
-                <ul><li>${cameraFullName}</li><li>Sol date: ${photoSol}</li><li>Earth date: ${earthDate}</li><li>Photo ID: ${photoId}</li></ul>`
-            }
+            showPhotos(photosData)
         } catch (error) {
-            console.log(error);
-            content.innerHTML = "Oops, there was an internal problem. We have just dispatched a group of monkeys to fix the problem for you :)";
-        } 
+            loadingIndicator.classList.toggle('hide');
+            handleErrorMessage(error);
+        }
     });
 }
 
@@ -142,3 +138,29 @@ function onClickPlay() {
     audioTwo.play();
 }
 
+function showPhotos(photosData) {
+    let photoListHTML = "";
+
+        for (const photo of photosData.photos) {
+            const photoId = photo.id;
+            const photoSol = photo.sol;
+            const photoImgSrc = photo.img_src;
+            const cameraFullName = photo.camera.full_name;
+            const earthDate = photo.earth_date;
+
+            photoListHTML = `<img src=${photoImgSrc} height=400px>
+            <ul><li>${cameraFullName}</li><li>Sol date: ${photoSol}</li><li>Earth date: ${earthDate}</li><li>Photo ID: ${photoId}</li></ul>`
+
+            content.innerHTML = photoListHTML;
+        }
+}
+
+function handleErrorMessage(error) {
+    console.error("An error occurred:", error);
+
+    if (error instanceof TypeError) {
+        content.innerHTML = "Oops, there was an unexpected type error. Please try again later.";
+    } else {
+        content.innerHTML = "Oops, there was an internal problem. We have just dispatched a group of monkeys to fix the problem for you :)";
+    }
+}

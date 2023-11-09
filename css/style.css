@@ -25,6 +25,14 @@ form {
     width: 200px;
 }
 
+.hide {
+    display: none;
+}
+
+.no-bullets ul {
+    list-style: none;
+}
+
 h1 {
     font-size: 3rem;
 }
