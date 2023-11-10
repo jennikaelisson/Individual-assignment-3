@@ -9,6 +9,7 @@ let solButtons = document.getElementsByClassName('sol-dates');
 let loadingIndicator = document.getElementById('loading-indicator'); 
 let soundWaveGif = document.getElementById('wave');
 
+// Only show number or date input depending on whether user chooses sol or earth date
 dateChoice.addEventListener('change', function() {
     const selectedOption = dateChoice.value;
 
@@ -32,12 +33,13 @@ fetchBtn.addEventListener('click', async function() {
         return;
     }
 
-    content.innerHTML = '';
+    content.innerHTML = ''; // Empty content div from previous fetches
 
-     // Show the loading indicator before making the fetch request
+     // Show the loading gif before making the fetch request
      loadingIndicator.classList.toggle('hide');
 
     try {
+        // Check whether user has entered a sol or earth date and send sol/earth value and camera angle value into fetch url
         let solValue = dayInput.value;
         let earthDateValue = earthInput.value;
         let solOrEarthParam = dateChoice.value === 'sol' ? `sol=${solValue}` : `earth_date=${earthDateValue}`;
@@ -54,11 +56,12 @@ fetchBtn.addEventListener('click', async function() {
         let photosData = await response.json();
         console.log(photosData);
 
-        // Hide the loading indicator after data is fetched
+        // Hide loading gif when displaying new fetch data
         loadingIndicator.classList.toggle('hide');
 
         showPhotos(photosData)          
     } catch (error) {
+        // Hide loading gif before displaying error message
         loadingIndicator.classList.toggle('hide');
         handleErrorMessage(error);
     } 
@@ -69,13 +72,13 @@ for (const solButton of solButtons) {
     solButton.addEventListener('click', async function() {
         onClickPlay()
 
-        content.innerHTML = '';
+        content.innerHTML = ''; // Empty content div from previous fetches
 
-        // Show the loading indicator before making the fetch request
+        // Show the loading gif before making the fetch request
         loadingIndicator.classList.toggle('hide');
 
         try {
-            let solValue = solButton.textContent; // Get the sol date from the clicked button
+            let solValue = solButton.textContent; // Get the sol date from the clicked button and send value into fetch url
             let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=${solValue}&api_key=DEMO_KEY`);
             console.log(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=${solValue}&api_key=DEMO_KEY`);
 
@@ -86,10 +89,12 @@ for (const solButton of solButtons) {
             let photosData = await response.json();
             console.log(photosData);
 
+            // Hide loading gif when displaying new fetch data
             loadingIndicator.classList.toggle('hide');
 
             showPhotos(photosData)
-        } catch (error) {
+        } catch (error) {        
+            // Hide loading gif before displaying error message
             loadingIndicator.classList.toggle('hide');
             handleErrorMessage(error);
         } 
@@ -102,12 +107,12 @@ for (const earthButton of earthButtons) {
     earthButton.addEventListener('click', async function() {
         onClickPlay()
 
-        content.innerHTML = '';
+        content.innerHTML = ''; // Empty content div from previous fetches
 
-        // Show the loading indicator before making the fetch request
+        // Show the loading gif before making the fetch request
         loadingIndicator.classList.toggle('hide');
         try {
-            let earthValue = earthButton.textContent; // Get the earth date from the clicked button
+            let earthValue = earthButton.textContent; // Get the earth date from the clicked button and send value into fetch url
             let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthValue}&api_key=DEMO_KEY`);
             console.log(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthValue}&api_key=DEMO_KEY`);
 
@@ -118,28 +123,36 @@ for (const earthButton of earthButtons) {
             let photosData = await response.json();
             console.log(photosData);
 
+            // Hide loading gif when displaying new fetch data
             loadingIndicator.classList.toggle('hide');
 
             showPhotos(photosData)
         } catch (error) {
+            // Hide loading gif before displaying error message
             loadingIndicator.classList.toggle('hide');
             handleErrorMessage(error);
         }
     });
 }
 
+
 soundWaveGif.addEventListener('click', onLoadPlay)
 
+// Function to add audio to soundwave gif
 function onLoadPlay() {
-    let audioOne = new Audio("https://github.com/jennikaelisson/Individual-assignment-3/raw/main/audio/brain-damage-148577.mp3");
+    // Audio link gathered from my files on github, if it doesnt work, try src "../audio/brain-damage-148577.mp3"
+    let audioOne = new Audio("https://github.com/jennikaelisson/Individual-assignment-3/raw/main/audio/brain-damage-148577.mp3"); 
     audioOne.play();
 } 
 
+// Function to add audio while clicking a button
 function onClickPlay() {
+    // Audio link gathered from my files on github, if it doesnt work, try src "../audio/blaster-2-81267.mp3.mp3"
     let audioTwo = new Audio("https://github.com/jennikaelisson/Individual-assignment-3/raw/main/audio/blaster-2-81267.mp3");
     audioTwo.play();
 }
 
+// Function to sort and display data in content div
 function showPhotos(photosData) {
     let photoListHTML = "";
 
@@ -157,6 +170,7 @@ function showPhotos(photosData) {
         }
 }
 
+// Function to handle and display errors
 function handleErrorMessage(error) {
     console.error("An error occurred:", error);
 
