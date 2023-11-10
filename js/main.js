@@ -28,7 +28,7 @@ fetchBtn.addEventListener('click', async function() {
 
     // Check that user has entered a valid date before fetching API
     if (!dayInput.value && !earthInput.value) {
-        content.innerHTML = "<h2>Please enter a date before fetching photos!</h2>";
+        content.innerHTML = "<h4>Please enter a date before fetching photos!</h4>";
         return;
     }
 
@@ -131,7 +131,7 @@ for (const earthButton of earthButtons) {
 soundWaveGif.addEventListener('click', onLoadPlay)
 
 function onLoadPlay() {
-    let audioOne = new Audio("../audio/brain-damage-148577.mp3");
+    let audioOne = new Audio("https://github.com/jennikaelisson/Individual-assignment-3/raw/main/audio/brain-damage-148577.mp3");
     audioOne.play();
 } 
 
@@ -161,9 +161,9 @@ function handleErrorMessage(error) {
     console.error("An error occurred:", error);
 
     if (error instanceof TypeError) {
-        content.innerHTML = "Oops, there was an unexpected type error. Please try again later.";
+        content.innerHTML = "Oops, there was an unexpected type error. Take a trip to the moon while we try to fix it!";
     } else {
-        content.innerHTML = "Oops, there was an internal problem. We have just dispatched a group of monkeys to fix the problem for you :)";
+        content.innerHTML = "Oops, there was an internal problem. Take a trip to Jupiter while we try to fix it!";
     }
 }
 
