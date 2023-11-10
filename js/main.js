@@ -7,6 +7,8 @@
 //Set-Cookie: cookieName=cookieValue; SameSite=None; Secure
 
 
+// ############### DECLARATIONS ###################
+
 let fetchBtn = document.getElementById('fetch-btn');
 let dateChoice = document.getElementById('date-choice');
 let dayInput = document.getElementById('day-input');
@@ -19,6 +21,11 @@ let loadingIndicator = document.getElementById('loading-indicator');
 let soundWaveGif = document.getElementById('wave');
 let url = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?';
 
+
+// Add sound when clicking gif
+soundWaveGif.addEventListener('click', onLoadPlay)
+
+// ################ FETCH BUTTON #####################
 
 // Only show number or date input depending on whether user chooses sol or earth date
 dateChoice.addEventListener('change', function() {
@@ -64,12 +71,14 @@ fetchBtn.addEventListener('click', async function() {
 
         showPhotos(photosData)          
     } catch (error) {
-        handleErrorMessage(error);
-    } finally {
+        handleError(error);
+    }finally {
         // Toggle the loading indicator visibility regardless of success or failure
         loadingIndicator.classList.toggle('hide', true);
     }    
 })
+
+// ################# SOL BUTTONS #####################
 
 // Loop through the collection of solButtons and add an event listener to each one
 for (const solButton of solButtons) {
@@ -91,8 +100,8 @@ for (const solButton of solButtons) {
             console.log(photosData);
 
             showPhotos(photosData)
-        } catch (error) {        
-            handleErrorMessage(error);
+        } catch (error) {
+            handleError(error);
         } finally {
             // Toggle the loading indicator visibility regardless of success or failure
             loadingIndicator.classList.toggle('hide', true);
@@ -101,6 +110,7 @@ for (const solButton of solButtons) {
     });
 }
 
+// ################# EARTH BUTTONS ##################
 
 // Loop through the collection of earthButtons and add an event listener to each one
 for (const earthButton of earthButtons) {
@@ -122,9 +132,7 @@ for (const earthButton of earthButtons) {
 
             showPhotos(photosData)
         } catch (error) {
-            // Hide loading gif before displaying error message
-            loadingIndicator.classList.toggle('hide');
-            handleErrorMessage(error);
+            handleError(error);
         } finally {
             // Toggle the loading indicator visibility regardless of success or failure
             loadingIndicator.classList.toggle('hide', true);
@@ -133,8 +141,7 @@ for (const earthButton of earthButtons) {
     });
 }
 
-// Add sound when clicking gif
-soundWaveGif.addEventListener('click', onLoadPlay)
+// ############### FUNCTIONS ###################
 
 // Function to add audio to soundwave gif
 function onLoadPlay() {
@@ -168,20 +175,45 @@ function showPhotos(photosData) {
         }
 }
 
+// ################### ERROR HANDLING #################
+
 // Function to handle errors caught after fetching, for example exceeding NASA's daily API limits of 50 calls
 function handleFetchError(response) {
     if (!response.ok) {
         if (response.status === 429) {
             throw new Error("API rate limit exceeded. Please try again later.");
         } else {
-            throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
+            const errorMessage = `HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`;
+            console.error("Fetch error:", errorMessage);
+            throw new Error(errorMessage);
         }
     }
+}
+
+// Function to check if the error is related to API rate limit
+function isFetchError(error) {
+    return error.message.includes("API rate limit exceeded");
 }
 
 // Function to handle and display errors
 function handleErrorMessage(error) {
     console.error("An error occurred:", error);
 
-    content.innerHTML = "Oops, there was an internal problem. Take a trip to Jupiter while we try to fix it!";
+    if (isFetchError(error)) {
+        content.innerHTML = "Oops, too many requests have been made. Take a trip to Mercury and come back later!";
+    } else {
+        content.innerHTML = "Oops, there was an internal problem. Take a trip to Jupiter while we try to fix it!";
+    }
+}
+
+// Function to gather all function for clean code in catch block
+function handleError(error) {
+    if (isFetchError(error)) {
+        // Handle the fetch error, including setting content.innerHTML
+        content.innerHTML = "Oops, too many requests have been made. Take a trip to Mercury and come back later!";
+    } else {
+        // Handle other errors using a general message
+        console.error("An error occurred:", error);
+        content.innerHTML = "Oops, there was an internal problem. Take a trip to Jupiter while we try to fix it!";
+    }
 }
