@@ -1,3 +1,12 @@
+// There are some cookie handling "warnings" showing up in my browser, 
+// probably related to the github link for giphy.gif. I chose to ignore 
+// them because they dont affect my website, but I just wanted to state 
+// that I am aware of them. Updating the attributes with this code below 
+// might work, but I've chosen to not apply it because I don't want to 
+// mess with my code.
+//Set-Cookie: cookieName=cookieValue; SameSite=None; Secure
+
+
 let fetchBtn = document.getElementById('fetch-btn');
 let dateChoice = document.getElementById('date-choice');
 let dayInput = document.getElementById('day-input');
@@ -8,6 +17,8 @@ let earthButtons = document.getElementsByClassName('earth-dates');
 let solButtons = document.getElementsByClassName('sol-dates');
 let loadingIndicator = document.getElementById('loading-indicator'); 
 let soundWaveGif = document.getElementById('wave');
+let url = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?';
+
 
 // Only show number or date input depending on whether user chooses sol or earth date
 dateChoice.addEventListener('change', function() {
@@ -43,28 +54,21 @@ fetchBtn.addEventListener('click', async function() {
         let solValue = dayInput.value;
         let earthDateValue = earthInput.value;
         let solOrEarthParam = dateChoice.value === 'sol' ? `sol=${solValue}` : `earth_date=${earthDateValue}`;
-        let url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${solOrEarthParam}&camera=${cameraAngle.value}&api_key=DEMO_KEY`;
 
-        let response = await fetch(url);
+        let response = await fetch(url + `${solOrEarthParam}&camera=${cameraAngle.value}&api_key=DEMO_KEY`);
 
-        console.log(url)
-
-        if (!response.ok) {
-            throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
-        }
+        handleFetchError(response)
 
         let photosData = await response.json();
         console.log(photosData);
 
-        // Hide loading gif when displaying new fetch data
-        loadingIndicator.classList.toggle('hide');
-
         showPhotos(photosData)          
     } catch (error) {
-        // Hide loading gif before displaying error message
-        loadingIndicator.classList.toggle('hide');
         handleErrorMessage(error);
-    } 
+    } finally {
+        // Toggle the loading indicator visibility regardless of success or failure
+        loadingIndicator.classList.toggle('hide', true);
+    }    
 })
 
 // Loop through the collection of solButtons and add an event listener to each one
@@ -79,25 +83,21 @@ for (const solButton of solButtons) {
 
         try {
             let solValue = solButton.textContent; // Get the sol date from the clicked button and send value into fetch url
-            let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=${solValue}&api_key=DEMO_KEY`);
-            console.log(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=${solValue}&api_key=DEMO_KEY`);
+            let response = await fetch(url + `sol=${solValue}&api_key=DEMO_KEY`);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
-            }
+            handleFetchError(response)
 
             let photosData = await response.json();
             console.log(photosData);
 
-            // Hide loading gif when displaying new fetch data
-            loadingIndicator.classList.toggle('hide');
-
             showPhotos(photosData)
         } catch (error) {        
-            // Hide loading gif before displaying error message
-            loadingIndicator.classList.toggle('hide');
             handleErrorMessage(error);
-        } 
+        } finally {
+            // Toggle the loading indicator visibility regardless of success or failure
+            loadingIndicator.classList.toggle('hide', true);
+        }
+        
     });
 }
 
@@ -113,29 +113,27 @@ for (const earthButton of earthButtons) {
         loadingIndicator.classList.toggle('hide');
         try {
             let earthValue = earthButton.textContent; // Get the earth date from the clicked button and send value into fetch url
-            let response = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthValue}&api_key=DEMO_KEY`);
-            console.log(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthValue}&api_key=DEMO_KEY`);
+            let response = await fetch(url + `earth_date=${earthValue}&api_key=DEMO_KEY`);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
-            }
+            handleFetchError(response)
 
             let photosData = await response.json();
             console.log(photosData);
-
-            // Hide loading gif when displaying new fetch data
-            loadingIndicator.classList.toggle('hide');
 
             showPhotos(photosData)
         } catch (error) {
             // Hide loading gif before displaying error message
             loadingIndicator.classList.toggle('hide');
             handleErrorMessage(error);
+        } finally {
+            // Toggle the loading indicator visibility regardless of success or failure
+            loadingIndicator.classList.toggle('hide', true);
         }
+        
     });
 }
 
-
+// Add sound when clicking gif
 soundWaveGif.addEventListener('click', onLoadPlay)
 
 // Function to add audio to soundwave gif
@@ -170,14 +168,20 @@ function showPhotos(photosData) {
         }
 }
 
+// Function to handle errors caught after fetching, for example exceeding NASA's daily API limits of 50 calls
+function handleFetchError(response) {
+    if (!response.ok) {
+        if (response.status === 429) {
+            throw new Error("API rate limit exceeded. Please try again later.");
+        } else {
+            throw new Error(`HTTP error code: ${response.status}, HTTP error message: ${response.statusText}`);
+        }
+    }
+}
+
 // Function to handle and display errors
 function handleErrorMessage(error) {
     console.error("An error occurred:", error);
 
-    if (error instanceof TypeError) {
-        content.innerHTML = "Oops, there was an unexpected type error. Take a trip to the moon while we try to fix it!";
-    } else {
-        content.innerHTML = "Oops, there was an internal problem. Take a trip to Jupiter while we try to fix it!";
-    }
+    content.innerHTML = "Oops, there was an internal problem. Take a trip to Jupiter while we try to fix it!";
 }
-
